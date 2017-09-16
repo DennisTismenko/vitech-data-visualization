@@ -5,9 +5,8 @@ import HomePage from '../index';
 
 describe('<HomePage />', () => {
   it('should render the page message', () => {
-    const renderedComponent = shallow(
+    shallow(
       <HomePage />
     );
-    expect(true).toEqual(true);
   });
 });

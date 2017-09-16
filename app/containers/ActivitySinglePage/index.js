@@ -4,7 +4,10 @@ import { withRouter, Link } from 'react-router';
 import GenderPieChart from 'components/GenderPieChart';
 import MaritalStatusPieChart from 'components/MaritalStatusPieChart';
 import AgeRangePieChart from 'components/AgeRangePieChart';
+import StatePieChart from 'components/StatePieChart';
 import InsurancePlansPieChart from 'components/InsurancePlansPieChart';
+import InsuranceCoveragePieChart from 'components/InsuranceCoveragePieChart';
+import InsuranceProductPieChart from 'components/InsuranceProductPieChart';
 
 class ActivitySinglePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -56,6 +59,27 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
           ]}
         />
 
+        <StatePieChart
+          participants={[
+            { state: 'Ontario' },
+            { state: 'Quebec' },
+            { state: 'Quebec' },
+            { state: 'Quebec' },
+            { state: 'British Columbia' },
+            { state: 'Alberta' },
+            { state: 'New Brunswick' },
+            { state: 'New Brunswick' },
+            { state: 'Nova Scotia' },
+            { state: 'New Brunswick' },
+            { state: 'New Brunswick' },
+            { state: 'Manitoba' },
+            { state: 'Saskatchewan' },
+            { state: 'Saskatchewan' },
+            { state: 'Newfoundland and Labrador' },
+            { state: 'Prince Edward Island' },
+          ]}
+        />
+
         <InsurancePlansPieChart
           policies={[
             { insurance_plan: 'Gold' },
@@ -68,6 +92,34 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
             { insurance_plan: 'Silver' },
             { insurance_plan: 'Regular' },
             { insurance_plan: 'Regular' },
+          ]}
+        />
+
+        <InsuranceCoveragePieChart
+          policies={[
+            { insurance_coverage: 'Family' },
+            { insurance_coverage: 'Family' },
+            { insurance_coverage: 'Family' },
+            { insurance_coverage: 'Family' },
+            { insurance_coverage: 'Family' },
+            { insurance_coverage: 'Single' },
+            { insurance_coverage: 'Single' },
+            { insurance_coverage: 'Single' },
+          ]}
+        />
+
+        <InsuranceProductPieChart
+          policies={[
+            { insurance_product: 'Dental' },
+            { insurance_product: 'Dental' },
+            { insurance_product: 'Dental' },
+            { insurance_product: 'Dental' },
+            { insurance_product: 'Dental' },
+            { insurance_product: 'Accidental' },
+            { insurance_product: 'Accidental' },
+            { insurance_product: 'Accidental' },
+            { insurance_product: 'Accidental' },
+            { insurance_product: 'Accidental' },
           ]}
         />
       </div>

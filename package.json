@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "description": "",
   "private": true,
-  "flat": true,
   "repository": {
     "type": "git",
     "url": "git://github.com/dennistismenko/vitech-data-visualization.git"

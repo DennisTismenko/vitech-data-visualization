@@ -91,3 +91,25 @@ export function ageRangeColor(ageRange) {
       return '#AAAAAA';
   }
 }
+
+/**
+ * Returns a color associated with an insurance plan.
+ *
+ * @param {string} insurancePlan
+ * @returns {string} color
+ */
+export function insurancePlansColor(insurancePlan) {
+  switch (insurancePlan) {
+    case 'Regular':
+      return '#607D8B';
+
+    case 'Silver':
+      return '#9E9E9E';
+
+    case 'Gold':
+      return '#FFC107';
+
+    default:
+      return '#AAAAAA';
+  }
+}

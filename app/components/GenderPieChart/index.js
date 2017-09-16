@@ -38,6 +38,7 @@ function GenderPieChart(props) {
         },
         tooltips: {
           callbacks: {
+            title: ([item], { labels }) => labels[item.index],
             label: ({ index }, { datasets }) => {
               const value = datasets[0].data[index];
               const percentage = Math.round((value / participants.length) * 100);

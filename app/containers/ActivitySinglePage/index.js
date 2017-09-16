@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router';
 import GenderPieChart from 'components/GenderPieChart';
 import MaritalStatusPieChart from 'components/MaritalStatusPieChart';
+import AgeRangePieChart from 'components/AgeRangePieChart';
 
 class ActivitySinglePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -36,6 +37,21 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
             { marital_status: 'M' },
             { marital_status: 'S' },
             { marital_status: 'S' },
+          ]}
+        />
+
+        <AgeRangePieChart
+          participants={[
+            { birth_date: '1980-06-11T00:00:00Z' },
+            { birth_date: '1980-06-14T00:00:00Z' },
+            { birth_date: '1980-07-07T00:00:00Z' },
+            { birth_date: '1980-04-23T00:00:00Z' },
+            { birth_date: '1967-05-24T00:00:00Z' },
+            { birth_date: '1950-05-06T00:00:00Z' },
+            { birth_date: '1960-04-24T00:00:00Z' },
+            { birth_date: '1960-04-27T00:00:00Z' },
+            { birth_date: '1950-07-19T00:00:00Z' },
+            { birth_date: '1990-05-28T00:00:00Z' },
           ]}
         />
       </div>

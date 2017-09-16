@@ -24,6 +24,38 @@ export default [
       importModules.catch(errorLoading);
     },
   }, {
+    path: '/activities',
+    name: 'activities',
+    getComponent(nextState, cb) {
+      const importModules = Promise.all([
+        import('containers/ActivitiesPage'),
+      ]);
+
+      const renderRoute = loadModule(cb);
+
+      importModules.then(([component]) => {
+        renderRoute(component);
+      });
+
+      importModules.catch(errorLoading);
+    },
+  }, {
+    path: '/activities/:id',
+    name: 'sepcific-activity',
+    getComponent(nextState, cb) {
+      const importModules = Promise.all([
+        import('containers/ActivitySinglePage'),
+      ]);
+
+      const renderRoute = loadModule(cb);
+
+      importModules.then(([component]) => {
+        renderRoute(component);
+      });
+
+      importModules.catch(errorLoading);
+    },
+  }, {
     path: '*',
     name: 'notfound',
     getComponent(nextState, cb) {

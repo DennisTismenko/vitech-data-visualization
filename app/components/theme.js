@@ -91,3 +91,115 @@ export function ageRangeColor(ageRange) {
       return '#AAAAAA';
   }
 }
+
+/**
+ * Returns a color associated with a state.
+ *
+ * @param {string} state
+ * @returns {string} color
+ */
+export function stateColor(state) {
+  switch (state) {
+    case 'Ontario':
+      return '#F44336';
+
+    case 'Quebec':
+      return '#E91E63';
+
+    case 'British Columbia':
+      return '#9C27B0';
+
+    case 'Alberta':
+      return '#673AB7';
+
+    case 'New Brunswick':
+      return '#3F51B5';
+
+    case 'Nova Scotia':
+      return '#2196F3';
+
+    case 'Manitoba':
+      return '#4CAF50';
+
+    case 'Saskatchewan':
+      return '#CDDC39';
+
+    case 'Newfoundland and Labrador':
+      return '#FFC107';
+
+    case 'Prince Edward Island':
+      return '#FF5722';
+
+    case 'Northwest Territory':
+      return '#795548';
+
+    case 'Nunavut Territory':
+      return '#607D8B';
+
+    case 'Yukon':
+      return '#009688';
+
+    default:
+      return '#AAAAAA';
+  }
+}
+
+/**
+ * Returns a color associated with an insurance plan.
+ *
+ * @param {string} insurancePlan
+ * @returns {string} color
+ */
+export function insurancePlansColor(insurancePlan) {
+  switch (insurancePlan) {
+    case 'Regular':
+      return '#607D8B';
+
+    case 'Silver':
+      return '#9E9E9E';
+
+    case 'Gold':
+      return '#FFC107';
+
+    default:
+      return '#AAAAAA';
+  }
+}
+
+/**
+ * Returns a color associated with an insurance coverage.
+ *
+ * @param {string} insuranceCoverage
+ * @returns {string} color
+ */
+export function insuranceCoveragesColor(insuranceCoverage) {
+  switch (insuranceCoverage) {
+    case 'Family':
+      return '#8BC34A';
+
+    case 'Single':
+      return '#607D8B';
+
+    default:
+      return '#AAAAAA';
+  }
+}
+
+/**
+ * Returns a color associated with an insurance product.
+ *
+ * @param {string} insuranceProduct
+ * @returns {string} color
+ */
+export function insuranceProductsColor(insuranceProduct) {
+  switch (insuranceProduct) {
+    case 'Dental':
+      return '#00BCD4';
+
+    case 'Accidental':
+      return '#FF5722';
+
+    default:
+      return '#AAAAAA';
+  }
+}

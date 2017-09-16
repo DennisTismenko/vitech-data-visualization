@@ -30,3 +30,32 @@ export function genderColor(gender) {
       return '#AAAAAA';
   }
 }
+
+export const genderAcronym = (gender) => ({
+  M: 'Male',
+  F: 'Female',
+})[gender];
+
+/**
+ * Returns a color associated with a marital status.
+ *
+ * @param {string} gender
+ * @returns {string} color
+ */
+export function maritalStatusColor(gender) {
+  switch (gender) {
+    case 'M':
+      return '#8BC34A';
+
+    case 'S':
+      return '#607D8B';
+
+    default:
+      return '#AAAAAA';
+  }
+}
+
+export const maritalStatusAcronym = (gender) => ({
+  M: 'Married',
+  S: 'Single',
+})[gender];

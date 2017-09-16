@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Pie } from 'react-chartjs-2';
 import { chain, defaultsDeep } from 'lodash';
-import { pieChartOptions, genderColor } from 'components/theme';
+import { pieChartOptions, genderColor, genderAcronym } from 'components/theme';
 
 function GenderPieChart(props) {
   const {
@@ -10,13 +10,13 @@ function GenderPieChart(props) {
   } = props;
 
   // Gender distribution of the participants
-  // key is the gender. For example, "M" or "F"
-  // value is the percentage rounded to the nearest tenths.
-  // For example, 40, 60.5
+  // Key is the gender. For example, "M" for male or "F" for female
+  // Value is the number of participants with that gender.
+  // For example, 40, 80
   const genderDistribution = chain(participants)
-    .reduce((result, x) => ({
+    .reduce((result, { sex }) => ({
       ...result,
-      [x.sex]: result[x.sex] ? result[x.sex] + 1 : 1,
+      [sex]: result[sex] ? result[sex] + 1 : 1,
     }), {})
     .value();
 
@@ -28,10 +28,11 @@ function GenderPieChart(props) {
           backgroundColor: Object.keys(genderDistribution)
             .map(genderColor),
         }],
-        labels: Object.keys(genderDistribution),
+        labels: Object.keys(genderDistribution)
+          .map(genderAcronym),
       }}
 
-      options={defaultsDeep(pieChartOptions, {
+      options={defaultsDeep({}, pieChartOptions, {
         title: {
           text: 'Gender',
         },

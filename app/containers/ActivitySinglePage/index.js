@@ -11,8 +11,8 @@ import InsuranceCoveragePieChart from 'components/InsuranceCoveragePieChart';
 import InsuranceProductPieChart from 'components/InsuranceProductPieChart';
 import Container from 'components/Container';
 import OneOfTwo from 'components/OneOfTwo';
-import BlurredBackground from 'components/BlurredBackground';
-import background from 'assets/activity-background.jpg';
+// import BlurredBackground from 'components/BlurredBackground';
+// import background from 'assets/activity-background.jpg';
 import Card from 'material-ui/Card';
 import { stateAdapterHack, arrayToObjectHack } from '../../HACKS';
 import fetchCollection from '../../network';
@@ -1123,7 +1123,7 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
             { policy_start_date: '2015-07-14T00:00:00Z' },
           ]}
         />
-        
+
         <Container>
           <OneOfTwo>
             <Card style={cardStyle}>

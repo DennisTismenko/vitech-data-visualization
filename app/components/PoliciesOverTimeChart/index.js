@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { chain, minBy, maxBy } from 'lodash';
+import { chain, minBy, maxBy, max } from 'lodash';
 import { Line as LineChart } from 'react-chartjs-2';
 import 'chartjs-plugin-annotation';
 
@@ -41,14 +41,21 @@ function PoliciesOverTimeChart(props) {
   const activityDateIndex = Object.keys(policyDistribution)
       .indexOf(activityDate.toISOString().split('T')[0]);
 
+  const dataValues = Object.values(policyDistribution)
+      .slice(activityDateIndex - daysBeforeCampaign, activityDateIndex + daysAfterCampaign);
+
+  const upperBound = max(dataValues) + 2;
+
+
   return (
     <LineChart
       data={{
         labels: Object.keys(policyDistribution)
             .slice(activityDateIndex - daysBeforeCampaign, activityDateIndex + daysAfterCampaign),
         datasets: [{
-          data: Object.values(policyDistribution)
-              .slice(activityDateIndex - daysBeforeCampaign, activityDateIndex + daysAfterCampaign),
+          data: dataValues,
+          backgroundColor: '#81D4FA',
+          borderColor: '#0288D1',
         }],
       }}
       options={{
@@ -66,6 +73,48 @@ function PoliciesOverTimeChart(props) {
             },
           },
           ] },
+        layout: {
+          padding: {
+            left: 200,
+            right: 200,
+            top: 200,
+            bottom: 200,
+          },
+        },
+        legend: {
+          display: false,
+        },
+        scales:
+        {
+          xAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Date',
+              fontSize: 24,
+              fontStyle: 'bold',
+            },
+            ticks: {
+              maxRotation: 45,
+              minRotation: 45,
+            },
+          }],
+          yAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Policies',
+              fontSize: 24,
+              fontStyle: 'bold',
+            },
+            ticks: {
+              stepSize: 1,
+              max: upperBound,
+            } }],
+        },
+        title: {
+          display: true,
+          fontSize: 36,
+          text: 'Policies over Time',
+        },
       }}
     />
   );

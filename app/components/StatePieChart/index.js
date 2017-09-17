@@ -1,29 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Pie } from 'react-chartjs-2';
-import { chain, defaultsDeep } from 'lodash';
-import { pieChartOptions, stateColor } from 'components/theme';
+import { reduce, defaultsDeep } from 'lodash';
+import { numberWithCommas, pieChartOptions, stateColor } from 'components/theme';
 
 function StatePieChart(props) {
-  const {
-    participants,
-  } = props;
-
   // State distribution of the participants
   // Key is the state. For example, "Ontario", "British Columbia"
   // Value is the number of participants within that state.
-  // For example, 40, 80
-  const stateDistribution = chain(participants)
-    .reduce((result, { state }) => ({
-      ...result,
-      [state]: result[state] ? result[state] + 1 : 1,
-    }), {})
-    .value();
+  const {
+    stateDistribution,
+  } = props;
+  const total = reduce(stateDistribution, (sum, x) => sum + (x || 0), 0);
 
   return (
     <Pie
-      width="100%"
-      height="500"
+      height={500}
 
       data={{
         datasets: [{
@@ -43,8 +35,8 @@ function StatePieChart(props) {
             title: ([item], { labels }) => labels[item.index],
             label: ({ index }, { datasets }) => {
               const value = datasets[0].data[index];
-              const percentage = Math.round((value / participants.length) * 100);
-              return `${value} participant${value === 1 ? '' : 's'}, ${percentage}%`;
+              const percentage = Math.round((value / total) * 100);
+              return `${numberWithCommas(value)} participant${value === 1 ? '' : 's'}, ${percentage}%`;
             },
           },
         },
@@ -54,7 +46,7 @@ function StatePieChart(props) {
 }
 
 StatePieChart.propTypes = {
-  participants: PropTypes.arrayOf(PropTypes.object).isRequired,
+  stateDistribution: PropTypes.object.isRequired,
 };
 
 export default StatePieChart;

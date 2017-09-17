@@ -5,7 +5,7 @@ import GenderPieChart from 'components/GenderPieChart';
 import MaritalStatusPieChart from 'components/MaritalStatusPieChart';
 import AgeRangePieChart from 'components/AgeRangePieChart';
 import StatePieChart from 'components/StatePieChart';
-import InsurancePlansPieChart from 'components/InsurancePlansPieChart';
+import InsurancePlanPieChart from 'components/InsurancePlanPieChart';
 import InsuranceCoveragePieChart from 'components/InsuranceCoveragePieChart';
 import InsuranceProductPieChart from 'components/InsuranceProductPieChart';
 import Container from 'components/Container';
@@ -13,16 +13,95 @@ import OneOfTwo from 'components/OneOfTwo';
 import BlurredBackground from 'components/BlurredBackground';
 import background from 'assets/activity-background.jpg';
 import Card from 'material-ui/Card';
+import { stateAdapterHack, arrayToObjectHack } from '../../HACKS';
+import fetchCollection from '../../network';
 
 class ActivitySinglePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     params: PropTypes.object.isRequired,
   }
 
+  state = {
+    isLoading: true,
+    genderDistribution: null,
+    maritalStatusDistribution: null,
+    stateDistribution: null,
+    insurancePlanDistribution: null,
+    insuranceCoverageDistribution: null,
+    insuranceProductDistribution: null,
+  }
+
+  componentDidMount() {
+    const defaultOptions = {
+      q: '*:*',
+      facet: 'on',
+      rows: 0,
+      wt: 'json',
+    };
+    Promise.all([
+      fetchCollection('participant', {
+        ...defaultOptions,
+        'facet.field': 'sex',
+      }),
+      fetchCollection('participant', {
+        ...defaultOptions,
+        'facet.field': 'marital_status',
+      }),
+      fetchCollection('participant', {
+        ...defaultOptions,
+        'facet.field': 'state',
+      }),
+      fetchCollection('policy_info', {
+        ...defaultOptions,
+        'facet.field': 'insurance_plan',
+      }),
+      fetchCollection('policy_info', {
+        ...defaultOptions,
+        'facet.field': 'insurance_coverage',
+      }),
+      fetchCollection('policy_info', {
+        ...defaultOptions,
+        'facet.field': 'insurance_product',
+      }),
+    ])
+      .then(([
+        gender,
+        maritalStatus,
+        state,
+        insurancePlan,
+        insuranceCoverage,
+        insuranceProduct,
+      ]) => {
+        this.setState({
+          isLoading: false,
+          genderDistribution: arrayToObjectHack(gender.facet_counts.facet_fields.sex),
+          maritalStatusDistribution: arrayToObjectHack(maritalStatus.facet_counts.facet_fields.marital_status),
+          stateDistribution: stateAdapterHack(arrayToObjectHack(state.facet_counts.facet_fields.state)),
+          insurancePlanDistribution: arrayToObjectHack(insurancePlan.facet_counts.facet_fields.insurance_plan),
+          insuranceCoverageDistribution: arrayToObjectHack(insuranceCoverage.facet_counts.facet_fields.insurance_coverage),
+          insuranceProductDistribution: arrayToObjectHack(insuranceProduct.facet_counts.facet_fields.insurance_product),
+        });
+      });
+  }
+
   render() {
     const {
       params,
     } = this.props;
+    const {
+      isLoading,
+      genderDistribution,
+      maritalStatusDistribution,
+      stateDistribution,
+      insurancePlanDistribution,
+      insuranceCoverageDistribution,
+      insuranceProductDistribution,
+    } = this.state;
+
+    if (isLoading) {
+      return null;
+    }
+
     const cardStyle = {
       padding: 30,
       boxShadow: 'none',
@@ -43,12 +122,7 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
           <OneOfTwo>
             <Card style={cardStyle}>
               <GenderPieChart
-                participants={[
-                  { sex: 'M' },
-                  { sex: 'M' },
-                  { sex: 'M' },
-                  { sex: 'F' },
-                ]}
+                genderDistribution={genderDistribution}
               />
             </Card>
           </OneOfTwo>
@@ -56,12 +130,7 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
           <OneOfTwo>
             <Card style={cardStyle}>
               <MaritalStatusPieChart
-                participants={[
-                  { marital_status: 'M' },
-                  { marital_status: 'M' },
-                  { marital_status: 'S' },
-                  { marital_status: 'S' },
-                ]}
+                maritalStatusDistribution={maritalStatusDistribution}
               />
             </Card>
           </OneOfTwo>
@@ -88,43 +157,15 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
           <OneOfTwo>
             <Card style={cardStyle}>
               <StatePieChart
-                participants={[
-                  { state: 'Ontario' },
-                  { state: 'Quebec' },
-                  { state: 'Quebec' },
-                  { state: 'Quebec' },
-                  { state: 'British Columbia' },
-                  { state: 'Alberta' },
-                  { state: 'New Brunswick' },
-                  { state: 'New Brunswick' },
-                  { state: 'Nova Scotia' },
-                  { state: 'New Brunswick' },
-                  { state: 'New Brunswick' },
-                  { state: 'Manitoba' },
-                  { state: 'Saskatchewan' },
-                  { state: 'Saskatchewan' },
-                  { state: 'Newfoundland and Labrador' },
-                  { state: 'Prince Edward Island' },
-                ]}
+                stateDistribution={stateDistribution}
               />
             </Card>
           </OneOfTwo>
 
           <OneOfTwo>
             <Card style={cardStyle}>
-              <InsurancePlansPieChart
-                policies={[
-                  { insurance_plan: 'Gold' },
-                  { insurance_plan: 'Gold' },
-                  { insurance_plan: 'Gold' },
-                  { insurance_plan: 'Gold' },
-                  { insurance_plan: 'Gold' },
-                  { insurance_plan: 'Silver' },
-                  { insurance_plan: 'Silver' },
-                  { insurance_plan: 'Silver' },
-                  { insurance_plan: 'Regular' },
-                  { insurance_plan: 'Regular' },
-                ]}
+              <InsurancePlanPieChart
+                insurancePlanDistribution={insurancePlanDistribution}
               />
             </Card>
           </OneOfTwo>
@@ -132,16 +173,7 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
           <OneOfTwo>
             <Card style={cardStyle}>
               <InsuranceCoveragePieChart
-                policies={[
-                  { insurance_coverage: 'Family' },
-                  { insurance_coverage: 'Family' },
-                  { insurance_coverage: 'Family' },
-                  { insurance_coverage: 'Family' },
-                  { insurance_coverage: 'Family' },
-                  { insurance_coverage: 'Single' },
-                  { insurance_coverage: 'Single' },
-                  { insurance_coverage: 'Single' },
-                ]}
+                insuranceCoverageDistribution={insuranceCoverageDistribution}
               />
             </Card>
           </OneOfTwo>
@@ -149,18 +181,7 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
           <OneOfTwo>
             <Card style={cardStyle}>
               <InsuranceProductPieChart
-                policies={[
-                  { insurance_product: 'Dental' },
-                  { insurance_product: 'Dental' },
-                  { insurance_product: 'Dental' },
-                  { insurance_product: 'Dental' },
-                  { insurance_product: 'Dental' },
-                  { insurance_product: 'Accidental' },
-                  { insurance_product: 'Accidental' },
-                  { insurance_product: 'Accidental' },
-                  { insurance_product: 'Accidental' },
-                  { insurance_product: 'Accidental' },
-                ]}
+                insuranceProductDistribution={insuranceProductDistribution}
               />
             </Card>
           </OneOfTwo>

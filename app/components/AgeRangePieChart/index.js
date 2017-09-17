@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Pie } from 'react-chartjs-2';
 import { chain, defaultsDeep } from 'lodash';
-import { pieChartOptions, ageRangeColor } from 'components/theme';
+import { numberWithCommas, pieChartOptions, ageRangeColor } from 'components/theme';
 
 function AgeRangePieChart(props) {
   const {
@@ -43,8 +43,7 @@ function AgeRangePieChart(props) {
 
   return (
     <Pie
-      width="100%"
-      height="500"
+      height={500}
 
       data={{
         datasets: [{
@@ -65,7 +64,7 @@ function AgeRangePieChart(props) {
             label: ({ index }, { datasets }) => {
               const value = datasets[0].data[index];
               const percentage = Math.round((value / participants.length) * 100);
-              return `${value} participant${value === 1 ? '' : 's'}, ${percentage}%`;
+              return `${numberWithCommas(value)} participant${value === 1 ? '' : 's'}, ${percentage}%`;
             },
           },
         },

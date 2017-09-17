@@ -1,29 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Pie } from 'react-chartjs-2';
-import { chain, defaultsDeep } from 'lodash';
-import { pieChartOptions, genderColor, genderAcronym } from 'components/theme';
+import { reduce, defaultsDeep } from 'lodash';
+import { numberWithCommas, pieChartOptions, genderColor, genderAcronym } from 'components/theme';
 
 function GenderPieChart(props) {
-  const {
-    participants,
-  } = props;
-
   // Gender distribution of the participants
   // Key is the gender. For example, "M" for male or "F" for female
   // Value is the number of participants with that gender.
-  // For example, 40, 80
-  const genderDistribution = chain(participants)
-    .reduce((result, { sex }) => ({
-      ...result,
-      [sex]: result[sex] ? result[sex] + 1 : 1,
-    }), {})
-    .value();
+  const {
+    genderDistribution,
+  } = props;
+  const total = reduce(genderDistribution, (sum, x) => sum + (x || 0), 0);
 
   return (
     <Pie
-      width="100%"
-      height="500"
+      height={500}
 
       data={{
         datasets: [{
@@ -44,8 +36,8 @@ function GenderPieChart(props) {
             title: ([item], { labels }) => labels[item.index],
             label: ({ index }, { datasets }) => {
               const value = datasets[0].data[index];
-              const percentage = Math.round((value / participants.length) * 100);
-              return `${value} participant${value === 1 ? '' : 's'}, ${percentage}%`;
+              const percentage = Math.round((value / total) * 100);
+              return `${numberWithCommas(value)} participant${value === 1 ? '' : 's'}, ${percentage}%`;
             },
           },
         },
@@ -55,7 +47,7 @@ function GenderPieChart(props) {
 }
 
 GenderPieChart.propTypes = {
-  participants: PropTypes.arrayOf(PropTypes.object).isRequired,
+  genderDistribution: PropTypes.object.isRequired,
 };
 
 export default GenderPieChart;

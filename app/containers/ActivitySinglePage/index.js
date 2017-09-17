@@ -309,10 +309,14 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
               />
             </Card>
           </OneOfTwo>
-
-          <Card style={cardStyle}>
-            <h1></h1>
-          </Card>
+            
+        {activity.promo_codes != 'NA' && <Card style={cardStyle}>
+            <h1 style={{textAlign:'center'}}> Who should you target next?</h1>
+            <p>We've automatically prepared a list of potential candidates that should be targeted. We picked them based on the success of previous conversions using our well-trained neural network</p>
+            <a href={`/assets/${activity.promocodes}.csv`} target="_blank">
+              <h4 style={{textAlign: 'center'}}>Download {activity.promocodes}.csv</h4>
+            </a>
+          </Card>}
         </Container>
       </div>
     );

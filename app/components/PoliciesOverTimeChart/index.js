@@ -73,19 +73,10 @@ function PoliciesOverTimeChart(props) {
             },
           },
           ] },
-        layout: {
-          padding: {
-            left: 200,
-            right: 200,
-            top: 200,
-            bottom: 200,
-          },
-        },
         legend: {
           display: false,
         },
-        scales:
-        {
+        scales: {
           xAxes: [{
             scaleLabel: {
               display: true,
@@ -101,7 +92,7 @@ function PoliciesOverTimeChart(props) {
           yAxes: [{
             scaleLabel: {
               display: true,
-              labelString: 'Policies',
+              labelString: 'Conversions',
               fontSize: 24,
               fontStyle: 'bold',
             },
@@ -113,7 +104,7 @@ function PoliciesOverTimeChart(props) {
         title: {
           display: true,
           fontSize: 36,
-          text: 'Policies over Time',
+          text: 'Conversions per day',
         },
       }}
     />

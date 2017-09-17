@@ -12,21 +12,25 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import AppBar from 'material-ui/AppBar';
-import { Link } from 'react-router';
+import { withRouter, Link } from 'react-router';
 import Container from 'components/Container';
 import Equalizer from 'material-ui-icons/Equalizer';
 import ArrowBack from 'material-ui-icons/ArrowBack';
 
 
-export default class App extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-
+class App extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     children: React.PropTypes.node,
+    location: PropTypes.object.isRequired,
   };
 
-
   render() {
+    const {
+      location,
+    } = this.props;
+    const pathSize = location.pathname.split('/').length;
     return (
       <div>
         <AppBar
@@ -38,9 +42,10 @@ export default class App extends React.PureComponent { // eslint-disable-line re
           <Container>
             <div style={{ display: 'flex', width: '960px' }}>
               <div style={{ flexGrow: 0 }}>
-                <Link to="/activities" style={{ color: 'white', textDecoration: 'none' }}>
+                {pathSize === 3 && <Link to="/activities" style={{ color: 'white', textDecoration: 'none' }}>
                   <ArrowBack style={{ width: '40px', height: '40px', marginTop: '16px' }} />
-                </Link>
+                </Link>}
+                {pathSize !== 3 && <div style={{ width: '40px', height: '40px', marginTop: '16px', display: 'inline-block' }} />}
               </div>
               <div style={{ flexGrow: 1, textAlign: 'center' }}>
                 <Link to="/activities" style={{ color: 'white', textDecoration: 'none' }}>
@@ -56,3 +61,5 @@ export default class App extends React.PureComponent { // eslint-disable-line re
     );
   }
 }
+
+export default withRouter(App);

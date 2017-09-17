@@ -75,10 +75,12 @@ function PoliciesOverTimeChart(props) {
           data: mappedPolicyWithPromoDistribution.values,
           backgroundColor: '#F48FB1',
           borderColor: '#C2185B',
+          label: 'Conversions using Promotion'
         }, {
           data: mappedPolicyDistribution.values,
           backgroundColor: '#81D4FA',
           borderColor: '#0288D1',
+          label: 'Total Conversions'
         }],
       }}
       options={{
@@ -97,7 +99,8 @@ function PoliciesOverTimeChart(props) {
           },
           ] },
         legend: {
-          display: false,
+          display: true,
+          position: 'right'
         },
         scales: {
           xAxes: [{

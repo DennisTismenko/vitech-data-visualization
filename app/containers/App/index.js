@@ -16,6 +16,7 @@ import AppBar from 'material-ui/AppBar';
 import { Link } from 'react-router';
 import Container from 'components/Container';
 import Equalizer from 'material-ui-icons/Equalizer'
+import ArrowBack from 'material-ui-icons/ArrowBack'
 
 
 export default class App extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function

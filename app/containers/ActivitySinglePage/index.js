@@ -8,6 +8,8 @@ import StatePieChart from 'components/StatePieChart';
 import InsurancePlansPieChart from 'components/InsurancePlansPieChart';
 import InsuranceCoveragePieChart from 'components/InsuranceCoveragePieChart';
 import InsuranceProductPieChart from 'components/InsuranceProductPieChart';
+import Container from 'components/Container';
+import OneOfTwo from 'components/OneOfTwo';
 
 class ActivitySinglePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -26,102 +28,118 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
           <Link to="/activities">Go back to activities</Link>
         </h1>
 
-        <GenderPieChart
-          participants={[
-            { sex: 'M' },
-            { sex: 'M' },
-            { sex: 'M' },
-            { sex: 'F' },
-          ]}
-        />
+        <Container>
+          <OneOfTwo>
+            <GenderPieChart
+              participants={[
+                { sex: 'M' },
+                { sex: 'M' },
+                { sex: 'M' },
+                { sex: 'F' },
+              ]}
+            />
+          </OneOfTwo>
 
-        <MaritalStatusPieChart
-          participants={[
-            { marital_status: 'M' },
-            { marital_status: 'M' },
-            { marital_status: 'S' },
-            { marital_status: 'S' },
-          ]}
-        />
+          <OneOfTwo>
+            <MaritalStatusPieChart
+              participants={[
+                { marital_status: 'M' },
+                { marital_status: 'M' },
+                { marital_status: 'S' },
+                { marital_status: 'S' },
+              ]}
+            />
+          </OneOfTwo>
 
-        <AgeRangePieChart
-          participants={[
-            { birth_date: '1980-06-11T00:00:00Z' },
-            { birth_date: '1980-06-14T00:00:00Z' },
-            { birth_date: '1980-07-07T00:00:00Z' },
-            { birth_date: '1980-04-23T00:00:00Z' },
-            { birth_date: '1967-05-24T00:00:00Z' },
-            { birth_date: '1950-05-06T00:00:00Z' },
-            { birth_date: '1960-04-24T00:00:00Z' },
-            { birth_date: '1960-04-27T00:00:00Z' },
-            { birth_date: '1950-07-19T00:00:00Z' },
-            { birth_date: '1990-05-28T00:00:00Z' },
-          ]}
-        />
+          <OneOfTwo>
+            <AgeRangePieChart
+              participants={[
+                { birth_date: '1980-06-11T00:00:00Z' },
+                { birth_date: '1980-06-14T00:00:00Z' },
+                { birth_date: '1980-07-07T00:00:00Z' },
+                { birth_date: '1980-04-23T00:00:00Z' },
+                { birth_date: '1967-05-24T00:00:00Z' },
+                { birth_date: '1950-05-06T00:00:00Z' },
+                { birth_date: '1960-04-24T00:00:00Z' },
+                { birth_date: '1960-04-27T00:00:00Z' },
+                { birth_date: '1950-07-19T00:00:00Z' },
+                { birth_date: '1990-05-28T00:00:00Z' },
+              ]}
+            />
+          </OneOfTwo>
 
-        <StatePieChart
-          participants={[
-            { state: 'Ontario' },
-            { state: 'Quebec' },
-            { state: 'Quebec' },
-            { state: 'Quebec' },
-            { state: 'British Columbia' },
-            { state: 'Alberta' },
-            { state: 'New Brunswick' },
-            { state: 'New Brunswick' },
-            { state: 'Nova Scotia' },
-            { state: 'New Brunswick' },
-            { state: 'New Brunswick' },
-            { state: 'Manitoba' },
-            { state: 'Saskatchewan' },
-            { state: 'Saskatchewan' },
-            { state: 'Newfoundland and Labrador' },
-            { state: 'Prince Edward Island' },
-          ]}
-        />
+          <OneOfTwo>
+            <StatePieChart
+              participants={[
+                { state: 'Ontario' },
+                { state: 'Quebec' },
+                { state: 'Quebec' },
+                { state: 'Quebec' },
+                { state: 'British Columbia' },
+                { state: 'Alberta' },
+                { state: 'New Brunswick' },
+                { state: 'New Brunswick' },
+                { state: 'Nova Scotia' },
+                { state: 'New Brunswick' },
+                { state: 'New Brunswick' },
+                { state: 'Manitoba' },
+                { state: 'Saskatchewan' },
+                { state: 'Saskatchewan' },
+                { state: 'Newfoundland and Labrador' },
+                { state: 'Prince Edward Island' },
+              ]}
+            />
+          </OneOfTwo>
 
-        <InsurancePlansPieChart
-          policies={[
-            { insurance_plan: 'Gold' },
-            { insurance_plan: 'Gold' },
-            { insurance_plan: 'Gold' },
-            { insurance_plan: 'Gold' },
-            { insurance_plan: 'Gold' },
-            { insurance_plan: 'Silver' },
-            { insurance_plan: 'Silver' },
-            { insurance_plan: 'Silver' },
-            { insurance_plan: 'Regular' },
-            { insurance_plan: 'Regular' },
-          ]}
-        />
+          <OneOfTwo>
+            <InsurancePlansPieChart
+              policies={[
+                { insurance_plan: 'Gold' },
+                { insurance_plan: 'Gold' },
+                { insurance_plan: 'Gold' },
+                { insurance_plan: 'Gold' },
+                { insurance_plan: 'Gold' },
+                { insurance_plan: 'Silver' },
+                { insurance_plan: 'Silver' },
+                { insurance_plan: 'Silver' },
+                { insurance_plan: 'Regular' },
+                { insurance_plan: 'Regular' },
+              ]}
+            />
+          </OneOfTwo>
 
-        <InsuranceCoveragePieChart
-          policies={[
-            { insurance_coverage: 'Family' },
-            { insurance_coverage: 'Family' },
-            { insurance_coverage: 'Family' },
-            { insurance_coverage: 'Family' },
-            { insurance_coverage: 'Family' },
-            { insurance_coverage: 'Single' },
-            { insurance_coverage: 'Single' },
-            { insurance_coverage: 'Single' },
-          ]}
-        />
+          <OneOfTwo>
+            <InsuranceCoveragePieChart
+              policies={[
+                { insurance_coverage: 'Family' },
+                { insurance_coverage: 'Family' },
+                { insurance_coverage: 'Family' },
+                { insurance_coverage: 'Family' },
+                { insurance_coverage: 'Family' },
+                { insurance_coverage: 'Single' },
+                { insurance_coverage: 'Single' },
+                { insurance_coverage: 'Single' },
+              ]}
+            />
+          </OneOfTwo>
 
-        <InsuranceProductPieChart
-          policies={[
-            { insurance_product: 'Dental' },
-            { insurance_product: 'Dental' },
-            { insurance_product: 'Dental' },
-            { insurance_product: 'Dental' },
-            { insurance_product: 'Dental' },
-            { insurance_product: 'Accidental' },
-            { insurance_product: 'Accidental' },
-            { insurance_product: 'Accidental' },
-            { insurance_product: 'Accidental' },
-            { insurance_product: 'Accidental' },
-          ]}
-        />
+          <OneOfTwo>
+            <InsuranceProductPieChart
+              policies={[
+                { insurance_product: 'Dental' },
+                { insurance_product: 'Dental' },
+                { insurance_product: 'Dental' },
+                { insurance_product: 'Dental' },
+                { insurance_product: 'Dental' },
+                { insurance_product: 'Accidental' },
+                { insurance_product: 'Accidental' },
+                { insurance_product: 'Accidental' },
+                { insurance_product: 'Accidental' },
+                { insurance_product: 'Accidental' },
+              ]}
+            />
+          </OneOfTwo>
+        </Container>
       </div>
     );
   }

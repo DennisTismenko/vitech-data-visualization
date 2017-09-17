@@ -14,9 +14,12 @@ import OneOfTwo from 'components/OneOfTwo';
 // import BlurredBackground from 'components/BlurredBackground';
 // import background from 'assets/activity-background.jpg';
 import Card from 'material-ui/Card';
+import { reduce } from 'lodash';
 import { numberWithCommas } from 'components/theme';
 import { stateAdapterHack, arrayToObjectHack } from '../../HACKS';
 import fetchCollection from '../../network';
+
+const ACTIVITY_DURATION_DAYS = 20;
 
 class ActivitySinglePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -26,7 +29,10 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
   state = {
     isLoading: true,
     activity: null,
+    activityFrom: null,
+    activityTo: null,
     policyDistribution: null,
+    policyWithPromoDistribution: null,
     genderDistribution: null,
     maritalStatusDistribution: null,
     stateDistribution: null,
@@ -51,71 +57,107 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
         wt: 'json',
         q: `id:${params.id}`,
       }),
-      fetchCollection('policy_info', {
-        ...defaultFacetOptions,
-        'facet.limit': 10000000,
-        'facet.field': 'policy_start_date',
-      }),
-      fetchCollection('policy_info', {
-        ...defaultFacetOptions,
-        q: 'promo_codes:*',
-        'facet.limit': 10000000,
-        'facet.field': 'policy_start_date',
-      }),
-      fetchCollection('participant', {
-        ...defaultFacetOptions,
-        'facet.limit': 10000000,
-        'facet.field': 'sex',
-      }),
-      fetchCollection('participant', {
-        ...defaultFacetOptions,
-        'facet.limit': 10000000,
-        'facet.field': 'marital_status',
-      }),
-      fetchCollection('participant', {
-        ...defaultFacetOptions,
-        'facet.limit': 10000000,
-        'facet.field': 'state',
-      }),
-      fetchCollection('policy_info', {
-        ...defaultFacetOptions,
-        'facet.limit': 10000000,
-        'facet.field': 'insurance_plan',
-      }),
-      fetchCollection('policy_info', {
-        ...defaultFacetOptions,
-        'facet.limit': 10000000,
-        'facet.field': 'insurance_coverage',
-      }),
-      fetchCollection('policy_info', {
-        ...defaultFacetOptions,
-        'facet.limit': 10000000,
-        'facet.field': 'insurance_product',
-      }),
     ])
       .then(([
         activity,
-        policy,
-        policyWithPromo,
-        gender,
-        maritalStatus,
-        state,
-        insurancePlan,
-        insuranceCoverage,
-        insuranceProduct,
       ]) => {
-        this.setState({
-          isLoading: false,
-          activity: activity.response.docs.length > 0 ? activity.response.docs[0] : null,
-          policyDistribution: arrayToObjectHack(policy.facet_counts.facet_fields.policy_start_date),
-          policyWithPromoDistribution: arrayToObjectHack(policyWithPromo.facet_counts.facet_fields.policy_start_date),
-          genderDistribution: arrayToObjectHack(gender.facet_counts.facet_fields.sex),
-          maritalStatusDistribution: arrayToObjectHack(maritalStatus.facet_counts.facet_fields.marital_status),
-          stateDistribution: stateAdapterHack(arrayToObjectHack(state.facet_counts.facet_fields.state)),
-          insurancePlanDistribution: arrayToObjectHack(insurancePlan.facet_counts.facet_fields.insurance_plan),
-          insuranceCoverageDistribution: arrayToObjectHack(insuranceCoverage.facet_counts.facet_fields.insurance_coverage),
-          insuranceProductDistribution: arrayToObjectHack(insuranceProduct.facet_counts.facet_fields.insurance_product),
-        });
+        const activityObj = activity.response.docs[0];
+        const activityEnd = new Date(activityObj.activity_date);
+        activityEnd.setDate(activityEnd.getDate() + ACTIVITY_DURATION_DAYS);
+        const activityPreviousMonth = new Date(activityObj.activity_date);
+        activityPreviousMonth.setDate(activityEnd.getDate() - ACTIVITY_DURATION_DAYS);
+        Promise.all([
+          fetchCollection('policy_info', {
+            ...defaultFacetOptions,
+            q: `policy_start_date:[${activityObj.activity_date} TO ${activityEnd.toISOString()}]`,
+            'facet.limit': 10000000,
+            'facet.field': 'policy_start_date',
+          }),
+          fetchCollection('policy_info', {
+            ...defaultFacetOptions,
+            q: `promo_codes:* policy_start_date:[${activityObj.activity_date} TO ${activityEnd.toISOString()}]`,
+            'q.op': 'AND',
+            'facet.limit': 10000000,
+            'facet.field': 'policy_start_date',
+          }),
+          fetchCollection('participant', {
+            ...defaultFacetOptions,
+            q: `{!join from=participant_id to=id fromIndex=policy_info}policy_start_date:[${activityObj.activity_date} TO ${activityEnd.toISOString()}]`,
+            'facet.limit': 10000000,
+            'facet.field': 'sex',
+          }),
+          fetchCollection('participant', {
+            ...defaultFacetOptions,
+            q: `{!join from=participant_id to=id fromIndex=policy_info}policy_start_date:[${activityObj.activity_date} TO ${activityEnd.toISOString()}]`,
+            'facet.limit': 10000000,
+            'facet.field': 'marital_status',
+          }),
+          fetchCollection('participant', {
+            ...defaultFacetOptions,
+            q: `{!join from=participant_id to=id fromIndex=policy_info}policy_start_date:[${activityObj.activity_date} TO ${activityEnd.toISOString()}]`,
+            'facet.limit': 10000000,
+            'facet.field': 'state',
+          }),
+          fetchCollection('policy_info', {
+            ...defaultFacetOptions,
+            q: `policy_start_date:[${activityObj.activity_date} TO ${activityEnd.toISOString()}]`,
+            'facet.limit': 10000000,
+            'facet.field': 'insurance_plan',
+          }),
+          fetchCollection('policy_info', {
+            ...defaultFacetOptions,
+            q: `policy_start_date:[${activityObj.activity_date} TO ${activityEnd.toISOString()}]`,
+            'facet.limit': 10000000,
+            'facet.field': 'insurance_coverage',
+          }),
+          fetchCollection('policy_info', {
+            ...defaultFacetOptions,
+            q: `policy_start_date:[${activityObj.activity_date} TO ${activityEnd.toISOString()}]`,
+            'facet.limit': 10000000,
+            'facet.field': 'insurance_product',
+          }),
+          fetchCollection('policy_info', {
+            ...defaultFacetOptions,
+            q: `policy_start_date:[${activityObj.activity_date} TO ${activityEnd.toISOString()}]`,
+            'facet.limit': 10000000,
+            'facet.field': 'insurance_premium',
+          }),
+          fetchCollection('policy_info', {
+            ...defaultFacetOptions,
+            q: `policy_start_date:[${activityPreviousMonth.toISOString()} TO ${activityObj.activity_date}]`,
+            'facet.limit': 10000000,
+            'facet.field': 'insurance_premium',
+          }),
+        ])
+          .then(([
+            policy,
+            policyWithPromo,
+            gender,
+            maritalStatus,
+            state,
+            insurancePlan,
+            insuranceCoverage,
+            insuranceProduct,
+            insurancePremium,
+            lastMonthInsurancePremium,
+          ]) => {
+            this.setState({
+              isLoading: false,
+              activity: activityObj,
+              activityFrom: activityObj.activity_date.split('T')[0],
+              activityTo: activityEnd.toISOString().split('T')[0],
+              policyDistribution: arrayToObjectHack(policy.facet_counts.facet_fields.policy_start_date),
+              policyWithPromoDistribution: arrayToObjectHack(policyWithPromo.facet_counts.facet_fields.policy_start_date),
+              genderDistribution: arrayToObjectHack(gender.facet_counts.facet_fields.sex),
+              maritalStatusDistribution: arrayToObjectHack(maritalStatus.facet_counts.facet_fields.marital_status),
+              stateDistribution: stateAdapterHack(arrayToObjectHack(state.facet_counts.facet_fields.state)),
+              insurancePlanDistribution: arrayToObjectHack(insurancePlan.facet_counts.facet_fields.insurance_plan),
+              insuranceCoverageDistribution: arrayToObjectHack(insuranceCoverage.facet_counts.facet_fields.insurance_coverage),
+              insuranceProductDistribution: arrayToObjectHack(insuranceProduct.facet_counts.facet_fields.insurance_product),
+              insurancePremiumDistribution: arrayToObjectHack(insurancePremium.facet_counts.facet_fields.insurance_premium),
+              lastMonthInsurancePremiumDistribution: arrayToObjectHack(lastMonthInsurancePremium.facet_counts.facet_fields.insurance_premium),
+            });
+          });
       });
   }
 
@@ -123,6 +165,8 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
     const {
       isLoading,
       activity,
+      activityFrom,
+      activityTo,
       policyDistribution,
       policyWithPromoDistribution,
       genderDistribution,
@@ -131,14 +175,24 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
       insurancePlanDistribution,
       insuranceCoverageDistribution,
       insuranceProductDistribution,
+      insurancePremiumDistribution,
+      lastMonthInsurancePremiumDistribution,
     } = this.state;
 
     if (isLoading) {
       return null;
     }
+
+    const policyTotal = reduce(policyDistribution, (sum, x) => sum + (x || 0), 0);
+    const policyWithPromoTotal = reduce(policyWithPromoDistribution, (sum, x) => sum + (x || 0), 0);
+    const gross = reduce(insurancePremiumDistribution, (sum, count, premium) => sum + (Number(premium) * Number(count)), 0);
+    const lastMonthGross = reduce(lastMonthInsurancePremiumDistribution, (sum, count, premium) => sum + (Number(premium) * Number(count)), 0);
+    const growth = Math.round((gross / lastMonthGross) * 100) - 100;
+
     const cardStyle = {
       padding: 30,
     };
+
     return (
       <div>
         <div style={{ height: 140 }} />
@@ -159,10 +213,9 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
           >
             <h2>{activity.campaign_initiative}</h2>
             <p>{activity.comments}</p>
-            <p><strong>Campaign started:</strong> {activity.activity_date.split('T')[0]}</p>
-            <p><strong>Activity type:</strong> {activity.activity_type}</p>
-            <p><strong>Reach:</strong> {numberWithCommas(activity.targeted_counts)} people</p>
-            <p><strong>Promotional code:</strong> {activity.promocodes}</p>
+            <p><strong>Activity type</strong> {activity.activity_type}</p>
+            <p><strong>Reach</strong> {numberWithCommas(activity.targeted_counts)} people</p>
+            <p><strong>Promotional code</strong> {activity.promocodes}</p>
           </Card>
           <Card
             style={{
@@ -174,9 +227,11 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
               margin: '0 15px 45px 15px',
             }}
           >
-            <p><strong>Promotional Codes Redeemed</strong> {}</p>
-            
-            <p><strong>Growth</strong> {}</p>
+            <p>From <strong style={{ color: '#BF360C' }}>{activityFrom}</strong>, to <strong style={{ color: '#BF360C' }}>{activityTo}</strong></p>
+            <p>Policies sold <strong style={{ color: '#43A047' }}>{numberWithCommas(policyTotal)}</strong></p>
+            <p>Promotional codes redeemed <strong style={{ color: '#F48FB1' }}>{numberWithCommas(policyWithPromoTotal)}</strong></p>
+            <p>Gross income <strong style={{ color: '#43A047' }}>{numberWithCommas(gross)} CAD</strong></p>
+            <p>Relative growth <strong style={{ color: growth >= 0 ? '#43A047' : '#E53935' }}>{(growth > 0 ? '+' : '') + numberWithCommas(growth)}%</strong> <small><i>(last 30 days)</i></small></p>
           </Card>
 
           <Card style={{ ...cardStyle, margin: '0 15px' }}>
@@ -254,6 +309,10 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
               />
             </Card>
           </OneOfTwo>
+
+          <Card style={cardStyle}>
+            <h1></h1>
+          </Card>
         </Container>
       </div>
     );

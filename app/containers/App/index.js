@@ -15,8 +15,8 @@ import React from 'react';
 import AppBar from 'material-ui/AppBar';
 import { Link } from 'react-router';
 import Container from 'components/Container';
-import Equalizer from 'material-ui-icons/Equalizer'
-import ArrowBack from 'material-ui-icons/ArrowBack'
+import Equalizer from 'material-ui-icons/Equalizer';
+import ArrowBack from 'material-ui-icons/ArrowBack';
 
 
 export default class App extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -37,13 +37,13 @@ export default class App extends React.PureComponent { // eslint-disable-line re
         >
           <Container>
             <div style={{ display: 'flex', width: '960px' }}>
-              <div style={{flexGrow: 0}}>
-                <Link to="/activities" style={{color: 'white', textDecoration: 'none'}}>
-                 <ArrowBack style={{width: '40px', height: '40px', marginTop: '16px'}}/>
+              <div style={{ flexGrow: 0 }}>
+                <Link to="/activities" style={{ color: 'white', textDecoration: 'none' }}>
+                  <ArrowBack style={{ width: '40px', height: '40px', marginTop: '16px' }} />
                 </Link>
               </div>
-              <div style={{flexGrow: 1, textAlign: 'center'}}>
-                <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>
+              <div style={{ flexGrow: 1, textAlign: 'center' }}>
+                <Link to="/activities" style={{ color: 'white', textDecoration: 'none' }}>
                   <Equalizer style={{ marginRight: '10px', width: '36px', height: '36px' }} />
                   <h2 style={{ display: 'inline-block' }}>V3 Data Visualization</h2>
                 </Link>

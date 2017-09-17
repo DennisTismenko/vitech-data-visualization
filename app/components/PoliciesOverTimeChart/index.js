@@ -5,23 +5,22 @@ import { Line as LineChart } from 'react-chartjs-2';
 import 'chartjs-plugin-annotation';
 
 const DAYS = 24 * 60 * 60 * 1000;
+const ACTIVITY_PRE_DURATION = 5;
+const ACTIVITY_DURATION = 20;
 
 function mapPolicyDistribution(activityDate, distribution) {
-  const daysBeforeCampaign = 5;
-  const daysAfterCampaign = 15;
-
   const firstDate = new Date(
     min(
       Object.keys(distribution)
         .map((x) => new Date(x).getTime())
-        .concat([activityDate.getTime() - (daysBeforeCampaign * DAYS)])
+        .concat([activityDate.getTime() - (ACTIVITY_PRE_DURATION * DAYS)])
     )
   );
   const lastDate = new Date(
     max(
       Object.keys(distribution)
         .map((x) => new Date(x).getTime())
-        .concat([activityDate.getTime() + (daysAfterCampaign * DAYS)])
+        .concat([activityDate.getTime() + (ACTIVITY_DURATION * DAYS)])
     )
   );
 
@@ -42,9 +41,9 @@ function mapPolicyDistribution(activityDate, distribution) {
       .indexOf(activityDate.toISOString().split('T')[0]);
 
   const labels = Object.keys(distributionSorted)
-    .slice(activityDateIndex - daysBeforeCampaign, activityDateIndex + daysAfterCampaign);
+    .slice(activityDateIndex - ACTIVITY_PRE_DURATION, activityDateIndex + ACTIVITY_DURATION);
   const values = Object.values(distributionSorted)
-    .slice(activityDateIndex - daysBeforeCampaign, activityDateIndex + daysAfterCampaign);
+    .slice(activityDateIndex - ACTIVITY_PRE_DURATION, activityDateIndex + ACTIVITY_DURATION);
 
   return {
     labels,
@@ -75,12 +74,12 @@ function PoliciesOverTimeChart(props) {
           data: mappedPolicyWithPromoDistribution.values,
           backgroundColor: '#F48FB1',
           borderColor: '#C2185B',
-          label: 'Conversions using Promotion'
+          label: 'Conversions using Promotion',
         }, {
           data: mappedPolicyDistribution.values,
           backgroundColor: '#81D4FA',
           borderColor: '#0288D1',
-          label: 'Total Conversions'
+          label: 'Total Conversions',
         }],
       }}
       options={{
@@ -100,7 +99,7 @@ function PoliciesOverTimeChart(props) {
           ] },
         legend: {
           display: true,
-          position: 'right'
+          position: 'right',
         },
         scales: {
           xAxes: [{

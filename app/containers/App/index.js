@@ -26,13 +26,7 @@ export default class App extends React.PureComponent { // eslint-disable-line re
   };
 
 
-
   render() {
-    const EqualizerIcon = () => (
-      <div>
-        <Equalizer label="Default" />
-      </div>
-    );
     return (
       <div>
         <AppBar
@@ -42,9 +36,9 @@ export default class App extends React.PureComponent { // eslint-disable-line re
           }}
         >
           <Container>
-            <Equalizer style={{marginRight: '10px', width: '36px', height: '36px'}}/>
             <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>
-              <h2 style={{display: 'inline-block'}}>V3 Data Visualization</h2>
+              <Equalizer style={{ marginRight: '10px', width: '36px', height: '36px' }} />
+              <h2 style={{ display: 'inline-block' }}>V3 Data Visualization</h2>
             </Link>
           </Container>
         </AppBar>

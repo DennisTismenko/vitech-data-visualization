@@ -10,6 +10,7 @@ injectGlobal`
 
   body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    overflow-x: hidden;
   }
 
   body.fontLoaded {

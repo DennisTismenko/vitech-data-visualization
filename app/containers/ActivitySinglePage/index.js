@@ -33,6 +33,8 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
     activityTo: null,
     policyDistribution: null,
     policyWithPromoDistribution: null,
+    policyDistributionFull: null,
+    policyWithPromoDistributionFull: null,
     genderDistribution: null,
     maritalStatusDistribution: null,
     stateDistribution: null,
@@ -76,6 +78,18 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
           fetchCollection('policy_info', {
             ...defaultFacetOptions,
             q: `promo_codes:* policy_start_date:[${activityObj.activity_date} TO ${activityEnd.toISOString()}]`,
+            'q.op': 'AND',
+            'facet.limit': 10000000,
+            'facet.field': 'policy_start_date',
+          }),
+          fetchCollection('policy_info', {
+            ...defaultFacetOptions,
+            'facet.limit': 10000000,
+            'facet.field': 'policy_start_date',
+          }),
+          fetchCollection('policy_info', {
+            ...defaultFacetOptions,
+            q: 'promo_codes:*',
             'q.op': 'AND',
             'facet.limit': 10000000,
             'facet.field': 'policy_start_date',
@@ -132,6 +146,8 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
           .then(([
             policy,
             policyWithPromo,
+            policyFull,
+            policyWithPromoFull,
             gender,
             maritalStatus,
             state,
@@ -148,6 +164,8 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
               activityTo: activityEnd.toISOString().split('T')[0],
               policyDistribution: arrayToObjectHack(policy.facet_counts.facet_fields.policy_start_date),
               policyWithPromoDistribution: arrayToObjectHack(policyWithPromo.facet_counts.facet_fields.policy_start_date),
+              policyDistributionFull: arrayToObjectHack(policyFull.facet_counts.facet_fields.policy_start_date),
+              policyWithPromoDistributionFull: arrayToObjectHack(policyWithPromoFull.facet_counts.facet_fields.policy_start_date),
               genderDistribution: arrayToObjectHack(gender.facet_counts.facet_fields.sex),
               maritalStatusDistribution: arrayToObjectHack(maritalStatus.facet_counts.facet_fields.marital_status),
               stateDistribution: stateAdapterHack(arrayToObjectHack(state.facet_counts.facet_fields.state)),
@@ -169,6 +187,8 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
       activityTo,
       policyDistribution,
       policyWithPromoDistribution,
+      policyDistributionFull,
+      policyWithPromoDistributionFull,
       genderDistribution,
       maritalStatusDistribution,
       stateDistribution,
@@ -237,8 +257,8 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
           <Card style={{ ...cardStyle, margin: '0 15px' }}>
             <PoliciesOverTimeChart
               activity={activity}
-              policyDistribution={policyDistribution}
-              policyWithPromoDistribution={policyWithPromoDistribution}
+              policyDistribution={policyDistributionFull}
+              policyWithPromoDistribution={policyWithPromoDistributionFull}
             />
           </Card>
           <div style={{ height: 50 }} />

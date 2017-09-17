@@ -14,7 +14,7 @@
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
 import { Link } from 'react-router';
-import Container from 'components/Container'
+import Container from 'components/Container';
 
 export default class App extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 

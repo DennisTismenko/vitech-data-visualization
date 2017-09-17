@@ -22,6 +22,9 @@ function InsuranceCoveragePieChart(props) {
 
   return (
     <Pie
+      width="100%"
+      height="500"
+
       data={{
         datasets: [{
           data: Object.values(insuranceCoveragesDistribution),

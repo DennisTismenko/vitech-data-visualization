@@ -11,6 +11,7 @@ export const pieChartOptions = {
     display: true,
     fontSize: 18,
   },
+  maintainAspectRatio: false,
 };
 
 /**

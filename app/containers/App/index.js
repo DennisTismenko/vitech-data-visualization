@@ -14,7 +14,9 @@
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
 import { Link } from 'react-router';
-import Container from 'components/Container'
+import Container from 'components/Container';
+import Equalizer from 'material-ui-icons/Equalizer'
+
 
 export default class App extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 
@@ -22,7 +24,14 @@ export default class App extends React.PureComponent { // eslint-disable-line re
     children: React.PropTypes.node,
   };
 
+  
+
   render() {
+    const EqualizerIcon = () => (
+      <div>
+        <Equalizer label="Default" />
+      </div>
+    );
     return (
       <div>
         <AppBar
@@ -32,8 +41,9 @@ export default class App extends React.PureComponent { // eslint-disable-line re
           }}
         >
           <Container>
+            <Equalizer style={{marginRight: '10px', width: '36px', height: '36px'}}/>
             <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>
-              <h2>V3 Data Visualization</h2>
+              <h2 style={{display: 'inline-block'}}>V3 Data Visualization</h2>
             </Link>
           </Container>
         </AppBar>

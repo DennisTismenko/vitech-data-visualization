@@ -119,10 +119,10 @@ export default class ActivitiesPage extends React.PureComponent { // eslint-disa
               >
                 <h2>{activity.campaign_initiative}</h2>
                 <p>{activity.comments}</p>
-                <p><strong>Campaign started</strong> {activity.activity_date.split('T')[0]}</p>
-                <p><strong>Activity type</strong> {activity.activity_type}</p>
-                <p><strong>Reach</strong> {numberWithCommas(activity.targeted_counts)} people</p>
-                <p><strong>Promocode</strong> {activity.promocodes}</p>
+                <p><strong>Campaign started:</strong> {activity.activity_date.split('T')[0]}</p>
+                <p><strong>Activity type:</strong> {activity.activity_type}</p>
+                <p><strong>Reach:</strong> {numberWithCommas(activity.targeted_counts)} people</p>
+                <p><strong>Promotional code:</strong> {activity.promocodes}</p>
               </Card>
             </Link>
           ))}

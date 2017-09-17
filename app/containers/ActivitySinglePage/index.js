@@ -159,10 +159,10 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
           >
             <h2>{activity.campaign_initiative}</h2>
             <p>{activity.comments}</p>
-            <p><strong>Campaign started</strong> {activity.activity_date.split('T')[0]}</p>
-            <p><strong>Activity type</strong> {activity.activity_type}</p>
-            <p><strong>Reach</strong> {numberWithCommas(activity.targeted_counts)} people</p>
-            <p><strong>Promocode</strong> {activity.promocodes}</p>
+            <p><strong>Campaign started:</strong> {activity.activity_date.split('T')[0]}</p>
+            <p><strong>Activity type:</strong> {activity.activity_type}</p>
+            <p><strong>Reach:</strong> {numberWithCommas(activity.targeted_counts)} people</p>
+            <p><strong>Promotional code:</strong> {activity.promocodes}</p>
           </Card>
           <Card
             style={{
@@ -174,7 +174,8 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
               margin: '0 15px 45px 15px',
             }}
           >
-            <p><strong>Promocodes redeemed</strong> {}</p>
+            <p><strong>Promotional Codes Redeemed</strong> {}</p>
+            
             <p><strong>Growth</strong> {}</p>
           </Card>
 

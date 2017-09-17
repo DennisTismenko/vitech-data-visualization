@@ -1,12 +1,15 @@
 import React from 'react';
 import Card from 'material-ui/Card';
 import { numberWithCommas } from 'components/theme';
+import { Link } from 'react-router';
+import { findIndex } from 'lodash';
 import fetchCollection from '../../network';
 
 export default class ActivitiesPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   state = {
     isLoading: true,
     activities: null,
+    scaledElementIndex: null,
   }
 
   componentDidMount() {
@@ -22,7 +25,16 @@ export default class ActivitiesPage extends React.PureComponent { // eslint-disa
         });
       });
 
-    let scrollLeft = 0;
+      this.startSlider();
+  }
+
+  componentWillUnmount() {
+    this.stopSlider();
+  }
+
+  startSlider = () => {
+    let scrollLeft = this.slider ? this.slider.scrollLeft : 0;
+    let lastTick = Date.now()
     this.sliderInterval = setInterval(() => {
       if (!this.slider) {
         return;
@@ -30,20 +42,38 @@ export default class ActivitiesPage extends React.PureComponent { // eslint-disa
       this.slider.scrollLeft = scrollLeft;
       if (scrollLeft >= this.slider.scrollWidth) {
         this.slider.scrollLeft = this.slider.scrollWidth;
-        clearTimeout(this.sliderInterval);
+        this.stopSlider();
       }
-      scrollLeft += 1;
-    }, 30);
+
+      const scaledElementIndex = findIndex(Array.from(this.slider.children), (el, i) => {
+        const rect = el.getBoundingClientRect();
+        const isScaled = (rect.left + (rect.width / 2)) / window.innerWidth >= 0.25 && (rect.left + (rect.width / 2)) / window.innerWidth <= 0.75;
+        return isScaled;
+      });
+
+      this.setState({
+        scaledElementIndex,
+      })
+
+      const now = Date.now()
+      const deltaSeconds = (now - lastTick) / 1000;
+      lastTick = now;
+      scrollLeft += 35 * deltaSeconds;
+    }, 16);
   }
 
-  componentWillUnmount() {
-    clearTimeout(this.sliderInterval);
+  stopSlider = () => {
+    clearInterval(this.sliderInterval);
+    this.setState({
+      scaledElementIndex: null,
+    });
   }
 
   render() {
     const {
       isLoading,
       activities,
+      scaledElementIndex,
     } = this.state;
 
     if (isLoading) {
@@ -59,32 +89,40 @@ export default class ActivitiesPage extends React.PureComponent { // eslint-disa
         />
         <div
           id="abc"
-          onClick={() => clearTimeout(this.sliderInterval)}
+          onClick={() => {
+            this.stopSlider();
+            clearTimeout(this.sliderTimeout);
+            this.sliderTimeout = setTimeout(this.startSlider, 3000);
+          }}
           ref={(el) => { this.slider = el; }}
           style={{
             overflowX: 'scroll',
             whiteSpace: 'nowrap',
-            padding: '30px 180px 60px 180px',
+            padding: '30px 300px 60px 300px',
           }}
         >
-          {activities.map((activity) => (
-            <Card
-              key={activity.id}
-              style={{
-                width: 320,
-                height: 400,
-                padding: 15,
-                display: 'inline-block',
-                whiteSpace: 'normal',
-                margin: '0 30px',
-                verticalAlign: 'bottom',
-              }}
-            >
-              <h2>{activity.campaign_initiative}</h2>
-              <p>{activity.comments}</p>
-              <strong>Promocode</strong> {activity.promocodes}
-              <p>Reached {numberWithCommas(activity.targeted_counts)} by {activity.activity_type}</p>
-            </Card>
+          {activities.map((activity, i) => (
+            <Link to={`/activities/${activity.id}`} style={{ color: '#222', textDecoration: 'none' }}>
+              <Card
+                key={activity.id}
+                style={{
+                  width: 320,
+                  height: 400,
+                  padding: 15,
+                  display: 'inline-block',
+                  whiteSpace: 'normal',
+                  margin: '0 30px',
+                  verticalAlign: 'bottom',
+                  transition: 'transform 2s',
+                  transform: i === scaledElementIndex ? 'scale(1.1)' : '',
+                }}
+              >
+                <h2>{activity.campaign_initiative}</h2>
+                <p>{activity.comments}</p>
+                <strong>Promocode</strong> {activity.promocodes}
+                <p>Reached {numberWithCommas(activity.targeted_counts)} by {activity.activity_type}</p>
+              </Card>
+            </Link>
           ))}
         </div>
         <div

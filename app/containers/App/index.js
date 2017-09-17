@@ -14,6 +14,7 @@
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
 import { Link } from 'react-router';
+import Container from 'components/Container'
 
 export default class App extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 
@@ -30,10 +31,11 @@ export default class App extends React.PureComponent { // eslint-disable-line re
             padding: '0 30px',
           }}
         >
-          <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>
-            <h2>V3 Data Visualization</h2>
-          </Link>
-
+          <Container>
+            <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>
+              <h2>V3 Data Visualization</h2>
+            </Link>
+          </Container>
         </AppBar>
         {React.Children.toArray(this.props.children)}
       </div>

@@ -118,7 +118,7 @@ class ActivitySinglePage extends React.PureComponent { // eslint-disable-line re
           height="2750px"
         /> */}
         <Container>
-          <Card style={{...cardStyle, margin: '0 15px'}}>
+          <Card style={{ ...cardStyle, margin: '0 15px' }}>
             <PoliciesOverTimeChart
               activity={{ activity_date: '2015-10-19T00:00:00Z' }}
               policies={[

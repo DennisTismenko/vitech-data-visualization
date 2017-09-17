@@ -2,16 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Pie } from 'react-chartjs-2';
 import { reduce, defaultsDeep } from 'lodash';
-import { numberWithCommas, pieChartOptions, genderColor, genderAcronym } from 'components/theme';
+import { numberWithCommas, pieChartOptions, stateColor } from 'components/theme';
 
-function GenderPieChart(props) {
-  // Gender distribution of the participants
-  // Key is the gender. For example, "M" for male or "F" for female
-  // Value is the number of participants with that gender.
+function StatePieChart(props) {
+  // State distribution of the participants
+  // Key is the state. For example, "Ontario", "British Columbia"
+  // Value is the number of participants within that state.
   const {
-    genderDistribution,
+    stateDistribution,
   } = props;
-  const total = reduce(genderDistribution, (sum, x) => sum + (x || 0), 0);
+  const total = reduce(stateDistribution, (sum, x) => sum + (x || 0), 0);
 
   return (
     <Pie
@@ -19,17 +19,16 @@ function GenderPieChart(props) {
 
       data={{
         datasets: [{
-          data: Object.values(genderDistribution),
-          backgroundColor: Object.keys(genderDistribution)
-            .map(genderColor),
+          data: Object.values(stateDistribution),
+          backgroundColor: Object.keys(stateDistribution)
+            .map(stateColor),
         }],
-        labels: Object.keys(genderDistribution)
-          .map(genderAcronym),
+        labels: Object.keys(stateDistribution),
       }}
 
       options={defaultsDeep({}, pieChartOptions, {
         title: {
-          text: 'Gender',
+          text: 'State',
         },
         tooltips: {
           callbacks: {
@@ -46,8 +45,8 @@ function GenderPieChart(props) {
   );
 }
 
-GenderPieChart.propTypes = {
-  genderDistribution: PropTypes.object.isRequired,
+StatePieChart.propTypes = {
+  stateDistribution: PropTypes.object.isRequired,
 };
 
-export default GenderPieChart;
+export default StatePieChart;
